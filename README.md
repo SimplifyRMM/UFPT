@@ -2,16 +2,25 @@
 User Folder Protection Tool
 
 ## Escape UnauthorizedAccessException when Enumerating User Profile Folders
-```csharp-interactive
-public static bool IndexFiles(string profile)
+```csharp
+public static bool CopyFolderWithoutErrors(string sourcePath, string destinationPath)
 {
   try
   {
-    List<string> files = new List<string>();
+    // Set Variables
+    string source_dir = Path.GetFullPath(sourcePath);
+    string destination_dir = Path.GetFullPath(destinationPath);
     
-    foreach (string str in Directory.EnumerateFiles(@"C:\Users\" + profile, "*.*", DirectoryOptions.AllDirectories))
+    // Create subdirectory structure in destination    
+    foreach (string dir in System.IO.Directory.GetDirectories(source_dir, "*", System.IO.SearchOption.AllDirectories))
     {
-      files.Add(str.ToString().Trim());
+        System.IO.Directory.CreateDirectory(System.IO.Path.Combine(destination_dir, dir.Substring(source_dir.Length + 1)));
+    }
+    
+    // Copy files over to their respective directories in destination
+    foreach (string file_name in System.IO.Directory.GetFiles(source_dir, "*", System.IO.SearchOption.AllDirectories))
+    {
+        System.IO.File.Copy(file_name, System.IO.Path.Combine(destination_dir, file_name.Substring(source_dir.Length + 1)));
     }
     
     return true;
