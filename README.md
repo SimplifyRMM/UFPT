@@ -1,6 +1,3 @@
-# UFPT
-User Folder Protection Tool
-
 ## Escape UnauthorizedAccessException when Enumerating User Profile Folders
 ```csharp
 public static bool CopyFolderWithoutErrors(string sourcePath, string destinationPath)
